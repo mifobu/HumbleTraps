@@ -1,39 +1,59 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TrapBehaviour : MonoBehaviour
 {
-    [SerializeField] private TrapTargetType trapTargetType;
-
+    [SerializeField]
+    private TrapTargetType trapType;
 
     private Trap trap;
 
-    private void Awake()
+    void Awake()
     {
         trap = new Trap();
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         var characterMover = other.GetComponent<ICharacterMover>();
-        trap.HandleCharacterEntered(characterMover, trapTargetType);
+        trap.HandleCharacterEntered(characterMover, trapType);
     }
 }
 
-public class Trap 
+public class Trap
 {
-    public void HandleCharacterEntered(ICharacterMover characterMover, TrapTargetType trapTargetType) 
+    public void HandleCharacterEntered(ICharacterMover characterMover, TrapTargetType trapTargetType)
     {
-        if (characterMover.IsPlayer) 
+        if (characterMover.IsPlayer)
         {
             if (trapTargetType == TrapTargetType.Player)
-            characterMover.Health--;
-        }
+            {
+                if (characterMover.Health == 0)
+                {
+                    characterMover.Health = 3;
+                }
+                else if (characterMover.Health > 0)
+                {
+                    characterMover.Health--;
+                }
+                
+            }
+        } 
         else
         {
             if (trapTargetType == TrapTargetType.Npc)
-            characterMover.Health--;
+            {
+                if (characterMover.Health == 0)
+                {
+                    characterMover.Health = 3;
+                }
+                else if (characterMover.Health > 0)
+                {
+                    characterMover.Health--;
+                }
+            }
         }
-        
     }
 }
 
